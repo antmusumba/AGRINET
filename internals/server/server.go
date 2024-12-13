@@ -5,49 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"encoding/json"
-
-	"github.com/gorilla/mux"
-	"github.com/rs/cors"
+	"github.com/antmusumba/agrinet/internals/routes"
 )
-
-// Response represents a standard API response
-type Response struct {
-	Status  string            `json:"status"`
-	Message string            `json:"message"`
-	Data    map[string]string `json:"data"`
-}
-
-// SetupRoutes configures all the routes for the application
-func SetupRoutes() http.Handler {
-	r := mux.NewRouter()
-
-	// Health check endpoint
-	r.HandleFunc("/health", HealthHandler).Methods("GET")
-
-	// Configure CORS
-	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"}, // Allows all origins in development
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	})
-
-	// Return the router with CORS middleware
-	return c.Handler(r)
-}
-
-// HealthHandler handles health check requests
-func HealthHandler(w http.ResponseWriter, r *http.Request) {
-	response := Response{
-		Status:  "success",
-		Message: "Gracefully shutdown the server",
-		Data: map[string]string{
-			"timestamp": time.Now().Format(time.RFC3339),
-		},
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
-}
 
 // Server represents the HTTP server
 type Server struct {
@@ -56,7 +15,7 @@ type Server struct {
 
 // NewServer creates a new server instance
 func NewServer(addr string) *Server {
-	router := SetupRoutes()
+	router := routes.SetupRoutes()
 
 	srv := &http.Server{
 		Addr:         addr,
@@ -73,6 +32,5 @@ func NewServer(addr string) *Server {
 
 // Start starts the server and handles graceful shutdown
 func (s *Server) Start() {
-	// Start the server
 	log.Printf("Server is starting on %s", s.server.Addr)
 }
