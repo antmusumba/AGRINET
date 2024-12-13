@@ -8,15 +8,31 @@ import (
 	"github.com/rs/cors"
 )
 
-// SetupRoutes configures all the routes for the application
-func SetupRoutes() http.Handler {
-	r := mux.NewRouter()
-	r.HandleFunc("/health", handlers.HealthHandler).Methods("GET")
+// Router represents the main router structure
+type Router struct {
+	muxRouter *mux.Router
+	handler   *handlers.Handler
+}
 
+// NewRouter initializes a new router with dependencies
+func NewRouter() *Router {
+	return &Router{
+		muxRouter: mux.NewRouter(),
+		handler:   handlers.NewHandler(),
+	}
+}
+
+// SetupRoutes configures all the routes for the application
+func (r *Router) SetupRoutes() http.Handler {
+	r.muxRouter.HandleFunc("/health", r.handler.HealthHandler).Methods("GET")
+
+	// Setup CORS
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"}, // Allows all origins in development
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		AllowCredentials: true,
 	})
 
-	return c.Handler(r)
+	return c.Handler(r.muxRouter)
 }
