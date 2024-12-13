@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/antmusumba/agrinet/internals/database"
+	"github.com/antmusumba/agrinet/internals/repositories"
 	"github.com/antmusumba/agrinet/internals/server"
 )
 
@@ -20,8 +22,16 @@ func GetPort() string {
 
 // main is the entry point of the application
 func main() {
-	srv := server.NewServer(GetPort())
+	db, err := database.InitDB("agrinet.db")
+	if err != nil {
+		log.Fatalf("Failed to initialize database: %v", err)
+	}
+	defer db.Close()
 
-	// Start the server
+	// Initialize repositories with database connection
+	userRepo := repositories.NewUserRepo(db)
+
+	// Create and start server
+	srv := server.NewServer(GetPort(), userRepo)
 	srv.Start()
 }
