@@ -13,6 +13,30 @@ type SuccessRes struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
+// ErrorRes represents the main structure with error information
+type ErrorRes struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+}
+
+// ErrJSON prepares and sends an error response in JSON format
+func (h *Handler) ErrJSON(w http.ResponseWriter, status int) error {
+	if h.Error == nil {
+		h.Error = &ErrorRes{
+			Status:  "error",
+			Message: "Internal server error",
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	if err := json.NewEncoder(w).Encode(h.Error); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // ReadJSON decodes a JSON request body into a data structure
 func (h *Handler) ReadJSON(w http.ResponseWriter, r *http.Request, data any) error {
 	if r.Header.Get("Content-Type") != "application/json" {
@@ -48,5 +72,6 @@ func (h *Handler) WriteJSON(w http.ResponseWriter, status int) error {
 	}
 
 	h.Success = nil
+	h.Error = nil
 	return nil
 }

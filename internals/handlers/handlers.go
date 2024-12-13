@@ -7,6 +7,7 @@ import (
 // Handler represents the main handler structure
 type Handler struct {
 	Success *SuccessRes
+	Error   *ErrorRes
 }
 
 // NewHandler creates a new instance of Handler
