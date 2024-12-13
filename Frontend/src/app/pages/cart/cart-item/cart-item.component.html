@@ -7,4 +7,5 @@
     <span class="text-sm"> {{ 'Ksh' + item().price }}</span>
   </div>
   <div class="flex-1">  </div>
+  <app-button label = "Remove" (btnClicked)="cartService.removeFromCart(item())"></app-button>
 </div>
