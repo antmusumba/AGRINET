@@ -1,28 +1,24 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
-	"time"
 )
 
-// Response represents a standard API response
-type Response struct {
-	Status  string            `json:"status"`
-	Message string            `json:"message"`
-	Data    map[string]string `json:"data"`
+// Handler represents the main handler structure
+type Handler struct {
+	Success *SuccessRes
+}
+
+// NewHandler creates a new instance of Handler
+func NewHandler() *Handler {
+	return &Handler{}
 }
 
 // HealthHandler handles health check requests
-func HealthHandler(w http.ResponseWriter, r *http.Request) {
-	response := Response{
+func (h *Handler) HealthHandler(w http.ResponseWriter, r *http.Request) {
+	h.Success = &SuccessRes{
 		Status:  "success",
-		Message: "Gracefully shutdown the server",
-		Data: map[string]string{
-			"timestamp": time.Now().Format(time.RFC3339),
-		},
+		Message: "Service is healthy",
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	h.WriteJSON(w, http.StatusOK)
 }
