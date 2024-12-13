@@ -22,7 +22,7 @@ type Server struct {
 
 // NewServer creates a new server instance
 func NewServer(addr string) *Server {
-	router := routes.SetupRoutes()
+	router := routes.NewRouter().SetupRoutes()
 
 	srv := &http.Server{
 		Addr:         addr,
