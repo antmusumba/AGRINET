@@ -20,7 +20,7 @@ type Response struct {
 func healthChecker(w http.ResponseWriter, r *http.Request) {
 	response := Response{
 		Status:  "success",
-		Message: "Server is healthy",
+		Message: "The server is breezing in a healthy way!",
 		Data: map[string]string{
 			"timestamp": time.Now().Format(time.RFC3339),
 		},
