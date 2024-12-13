@@ -6,22 +6,26 @@ import (
 )
 
 func TestPasswordHashingAndValidation(t *testing.T) {
-	password := "securepassword123"
-	hashedPassword, err := HashPassword(password)
+	plainPassword := "securepassword123"
+	wrongPassword := "wrongpassword"
+
+	// Hash the password
+	hashedPassword, err := HashPassword(plainPassword)
 	if err != nil {
 		t.Fatalf("Hashing failed: %v", err)
 	}
 
-	// Test with correct password
-	err = CheckPassword(hashedPassword, password)
-	if err != nil {
-		t.Errorf("Password validation failed for correct password: %v", err)
+	// Log the hashed password for debugging (optional)
+	log.Printf("Generated Hash: %s", hashedPassword)
+
+	// Validate the correct password
+	if err := CheckPassword(hashedPassword, plainPassword); err != nil {
+		t.Errorf("Validation failed for correct password: %v", err)
 	}
 
-	// Test with incorrect password
-	err = CheckPassword(hashedPassword, "wrongpassword")
-	if err == nil {
-		t.Error("Password validation succeeded for incorrect password")
+	// Validate an incorrect password
+	if err := CheckPassword(hashedPassword, wrongPassword); err == nil {
+		t.Error("Validation succeeded for incorrect password")
 	}
 }
 
