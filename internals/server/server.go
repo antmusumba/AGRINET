@@ -12,6 +12,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/antmusumba/agrinet/internals/repositories"
 	"github.com/antmusumba/agrinet/internals/routes"
 )
 
@@ -21,8 +22,8 @@ type Server struct {
 }
 
 // NewServer creates a new server instance
-func NewServer(addr string) *Server {
-	router := routes.NewRouter().SetupRoutes()
+func NewServer(addr string, userRepo repositories.UserRepo) *Server {
+	router := routes.NewRouter(userRepo).SetupRoutes()
 
 	srv := &http.Server{
 		Addr:         addr,
