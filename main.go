@@ -1,52 +1,27 @@
 package main
 
 import (
-	"encoding/json"
-	"github.com/gorilla/mux"
-	"github.com/rs/cors"
+	"fmt"
 	"log"
-	"net/http"
-	"time"
+	"os"
+
+	"github.com/antmusumba/agrinet/internals/server"
 )
 
-// Response represents a standard API response
-type Response struct {
-	Status  string      `json:"status"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"`
-}
-
-// healthChecker returns a simple health check response
-func healthChecker(w http.ResponseWriter, r *http.Request) {
-	response := Response{
-		Status:  "success",
-		Message: "The server is breezing in a healthy way!",
-		Data: map[string]string{
-			"timestamp": time.Now().Format(time.RFC3339),
-		},
+// GetPort returns the port from environment variable or default value
+func GetPort() string {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("No PORT environment variable found, using default: %s", port)
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	return fmt.Sprintf(":%s", port)
 }
 
+// main is the entry point of the application
 func main() {
-	// Create a new router
-	r := mux.NewRouter()
+	srv := server.NewServer(GetPort())
 
-	// Define routes
-	r.HandleFunc("/health", healthChecker).Methods("GET")
-
-	// Create CORS handler
-	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"}, // Allows all origins in development
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	})
-
-	// Start server
-	port := ":8080"
-	log.Printf("Server starting on port %s", port)
-	if err := http.ListenAndServe(port, c.Handler(r)); err != nil {
-		log.Fatalf("Server failed to start: %v", err)
-	}
+	// Start the server
+	srv.Start()
 }
