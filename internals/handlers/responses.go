@@ -19,8 +19,8 @@ type ErrorRes struct {
 	Message string `json:"message"`
 }
 
-// ErrJSON prepares and sends an error response in JSON format
-func (h *Handler) ErrJSON(w http.ResponseWriter, status int) error {
+// WriteError prepares and sends an error response in JSON format
+func (h *Handler) WriteError(w http.ResponseWriter, status int) error {
 	if h.Error == nil {
 		h.Error = &ErrorRes{
 			Status:  "error",
