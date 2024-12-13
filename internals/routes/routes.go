@@ -24,7 +24,7 @@ func NewRouter() *Router {
 
 // SetupRoutes configures all the routes for the application
 func (r *Router) SetupRoutes() http.Handler {
-	r.muxRouter.HandleFunc("/health", r.handler.HealthHandler).Methods("GET")
+	r.muxRouter.HandleFunc("/api/health", r.handler.HealthHandler).Methods("GET")
 
 	// Setup CORS
 	c := cors.New(cors.Options{

@@ -19,7 +19,7 @@ func NewHandler() *Handler {
 func (h *Handler) HealthHandler(w http.ResponseWriter, r *http.Request) {
 	h.Success = &SuccessRes{
 		Status:  "success",
-		Message: "Service is healthy",
+		Message: "Service is healthy and vibrating",
 	}
 	h.WriteJSON(w, http.StatusOK)
 }
