@@ -5,5 +5,11 @@
   >
     AGRINET
   </button>
+  <app-primary-button
+    [label]="'Cart ('+ cartService.cart().length +')'" (btnClicked)="showBtnClicked()"
+    routerLink="/cart"
+  >
+
+  </app-primary-button>
   <app-nav></app-nav>
 </div>
