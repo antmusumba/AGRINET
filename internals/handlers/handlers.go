@@ -155,3 +155,26 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	h.Success = &response
 	h.WriteJSON(w, http.StatusCreated)
 }
+
+// ListProducts handles listing all products
+func (h *Handler) ListProducts(w http.ResponseWriter, r *http.Request) {
+	products, err := h.productService.ListProducts()
+	if err != nil {
+		errorRes := ErrorRes{
+			Status:  "error",
+			Message: err.Error(),
+		}
+		h.Error = &errorRes
+		h.WriteError(w, http.StatusInternalServerError)
+		return
+	}
+
+	response := SuccessRes{
+		Status:  "success",
+		Message: "Products retrieved successfully",
+		Data:    products,
+	}
+
+	h.Success = &response
+	h.WriteJSON(w, http.StatusOK)
+}
