@@ -61,10 +61,8 @@ func (s *ProductService) DeleteProduct(id string) error {
 
 // ListProducts lists all products
 func (s *ProductService) ListProducts() ([]*models.Product, error) {
-	products, err := s.repo.ListProducts()
-	if err != nil {
-		return nil, err
-	}
+	products, _ := s.repo.ListProducts()
+
 	if len(products) == 0 {
 		return nil, errors.New("no products found")
 	}
