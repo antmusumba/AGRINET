@@ -1,0 +1,40 @@
+<div
+  class="bg-slate-100 text-green-700 text-xl font-bold px-4 py-3 shadow-md flex justify-between items-center"
+>
+  <!-- Logo -->
+  <button
+    class="text-xl"
+    routerLink="/"
+  >
+    AGRINET
+  </button>
+
+  <!-- Sign In Button (Only on Landing Page) -->
+  <app-primary-button
+    *ngIf="isLandingPage()"
+    label="Sign in"
+    routerLink="/auth"
+  ></app-primary-button>
+
+  <!-- Cart and Sign Out Buttons (Only on Products Page) -->
+  <div *ngIf="isProductsPage()" class="flex gap-4">
+    <app-primary-button
+      [label]="'Cart (' + cartService.cart().length + ')'"
+      routerLink="/cart"
+    ></app-primary-button>
+
+    <app-primary-button
+      label="Sign out"
+      (btnClicked)="onSignOut()"
+    ></app-primary-button>
+  </div>
+
+  <div *ngIf="isCartCheckout()">
+    <app-primary-button
+    label="Back to Products"
+    routerLink = "/product"
+    >
+
+    </app-primary-button>
+  </div>
+</div>

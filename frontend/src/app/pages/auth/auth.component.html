@@ -1,0 +1,65 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h1>
+      {{ isSignUp ? 'CREATE' : 'WELCOME BACK' }}
+      <span class="highlight">{{ isSignUp ? 'ACCOUNT' : 'TO AGRINET' }}</span>
+    </h1>
+    <p>
+      {{ isSignUp ? 'Already have an account?' : 'Don\'t have an account?' }}
+      <a class="link" (click)="toggleMode()">
+        {{ isSignUp ? 'Sign In' : 'Sign Up' }}
+      </a>
+    </p>
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+      <!-- Common Fields -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          [class.invalid]="authForm.get('email')?.invalid && authForm.get('email')?.touched"
+        />
+        <small *ngIf="authForm.get('email')?.invalid && authForm.get('email')?.touched">
+          Please enter a valid email.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          [class.invalid]="authForm.get('password')?.invalid && authForm.get('password')?.touched"
+        />
+        <small *ngIf="authForm.get('password')?.invalid && authForm.get('password')?.touched">
+          Password must be at least 6 characters long.
+        </small>
+      </div>
+
+      <!-- Additional Fields for Sign Up -->
+      <div *ngIf="isSignUp">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" formControlName="username" />
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input id="firstName" type="text" formControlName="firstName" />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input id="lastName" type="text" formControlName="lastName" />
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        {{ isSignUp ? 'Sign Up' : 'Sign In' }}
+      </button>
+    </form>
+  </div>
+</div>
