@@ -22,10 +22,12 @@ type User struct {
 
 // Product represents a product
 type Product struct {
-	ID     string `json:"id"`
-	UserID string `json:"userId"`
-	Title  string `json:"title"`
-	Image  string `json:"image"`
-	Price  int    `json:"price"`
-	Stock  int    `json:"stock"`
+	ID        string    `json:"id"`
+	UserID    string    `json:"userId"`
+	Title     string    `json:"title"`
+	Image     string    `json:"image"`
+	Price     int       `json:"price"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	Stock     int       `json:"stock"`
 }
