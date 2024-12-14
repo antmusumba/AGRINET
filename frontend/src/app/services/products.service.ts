@@ -3,18 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../environment/environment.dev';
-
-export interface Product {
-  id: string;
-  userId: string;
-  title: string;
-  image: string;
-  description: string;
-  price: number;
-  createdAt: string;
-  updatedAt: string;
-  stock: number;
-}
+import { Product } from '../models/products.models';
 
 @Injectable({
   providedIn: 'root',
