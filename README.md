@@ -26,6 +26,30 @@ Agrinet is an innovative digital platform designed to create a seamless connecti
 ## Secure Payment Gateway:
     To ensure a safe and reliable transaction process, Agrinet integrates a secure payment gateway that facilitates various payment options. This feature instills confidence in users and promotes a hassle-free buying experience.
 
+    ### Installation
+1. Prerequisites
+
+    Install Go (version 1.18 or higher).
+
+
+2. git clone: https://github.com/antmusumba/AgriNet.git
+
+
+## Usage
+
+Once you’ve cloned the repository, navigate into the project folder:
+
+```bash
+cd AGRINET
+```
+
+Then, fire it up with:
+
+```bash
+go run .
+```
+
+Open your browser and paste the following link to get started: `http://localhost:8080`. 
 
 # Frontend
 
