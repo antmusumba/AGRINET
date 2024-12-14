@@ -137,3 +137,28 @@ func (r *productRepo) DeleteProd(id string) error {
 
 	return nil
 }
+
+// ListProducts lists all products
+func (r *productRepo) ListProducts() ([]*models.Product, error) {
+	query := `
+		SELECT id, user_id, title, image, price, stock, created_at, updated_at
+		FROM products`
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var products []*models.Product
+	for rows.Next() {
+		product := &models.Product{}
+		err = rows.Scan(
+			&product.ID, &product.UserID, &product.Title, &product.Image,
+			&product.Price, &product.Stock, &product.CreatedAt, &product.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, product)
+	}
+	return products, nil
+}
