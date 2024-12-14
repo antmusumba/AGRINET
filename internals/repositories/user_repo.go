@@ -9,3 +9,11 @@ type UserRepo interface {
 	UpdateUser(user *models.User) error
 	DeleteUser(id string) error
 }
+
+type ProdRepo interface {
+	CreateProd(user *models.Product) error
+	GetPrdByEmail(username string) (*models.Product, error)
+	GetProdByID(id string) (*models.Product, error)
+	UpdateProd(user *models.Product) error
+	DeleteProd(id string) error
+}
