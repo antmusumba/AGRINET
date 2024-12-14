@@ -9,16 +9,20 @@ import (
 	"github.com/antmusumba/agrinet/pkg"
 )
 
-// Handler represents the main handler structure
+// Handler represents the main handler structure that includes all services
 type Handler struct {
-	service *services.AuthService
-	Error   *ErrorRes
-	Success *SuccessRes
+	authService    *services.AuthService
+	productService *services.ProductService
+	Error          *ErrorRes
+	Success        *SuccessRes
 }
 
-// NewHandler creates a new instance of Handler
-func NewHandler(service *services.AuthService) *Handler {
-	return &Handler{service: service}
+// NewHandler creates a new instance of Handler with combined services
+func NewHandler(authService *services.AuthService, productService *services.ProductService) *Handler {
+	return &Handler{
+		authService:    authService,
+		productService: productService,
+	}
 }
 
 // HealthHandler handles health check requests
@@ -44,7 +48,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.service.Register(&user); err != nil {
+	if err := h.authService.Register(&user); err != nil {
 		errorRes := ErrorRes{
 			Status:  "error",
 			Message: "Invalid input",
@@ -80,7 +84,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.Login(credentials.Email, credentials.Password)
+	user, err := h.authService.Login(credentials.Email, credentials.Password)
 	if err != nil {
 		errorRes := ErrorRes{
 			Status:  "error",
@@ -114,6 +118,61 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 				"name":  user.FirstName + " " + user.LastName,
 			},
 		},
+	}
+
+	h.Success = &response
+	h.WriteJSON(w, http.StatusOK)
+}
+
+// CreateProduct handles product creation
+func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
+	var product models.Product
+	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
+		errorRes := ErrorRes{
+			Status:  "error",
+			Message: "Invalid input",
+		}
+		h.Error = &errorRes
+		h.WriteError(w, http.StatusBadRequest)
+		return
+	}
+
+	err := h.productService.CreateProduct(&product)
+	if err != nil {
+		errorRes := ErrorRes{
+			Status:  "error",
+			Message: err.Error(),
+		}
+		h.Error = &errorRes
+		h.WriteError(w, http.StatusInternalServerError)
+		return
+	}
+
+	response := SuccessRes{
+		Status:  "success",
+		Message: "Product created successfully",
+	}
+	h.Success = &response
+	h.WriteJSON(w, http.StatusCreated)
+}
+
+// ListProducts handles listing all products
+func (h *Handler) ListProducts(w http.ResponseWriter, r *http.Request) {
+	products, err := h.productService.ListProducts()
+	if err != nil {
+		errorRes := ErrorRes{
+			Status:  "error",
+			Message: err.Error(),
+		}
+		h.Error = &errorRes
+		h.WriteError(w, http.StatusInternalServerError)
+		return
+	}
+
+	response := SuccessRes{
+		Status:  "success",
+		Message: "Products retrieved successfully",
+		Data:    products,
 	}
 
 	h.Success = &response

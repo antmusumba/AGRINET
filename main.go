@@ -30,8 +30,9 @@ func main() {
 
 	// Initialize repositories with database connection
 	userRepo := repositories.NewUserRepo(db)
+	prodRepo := repositories.NewProductRepo(db)
 
 	// Create and start server
-	srv := server.NewServer(GetPort(), userRepo)
+	srv := server.NewServer(GetPort(), userRepo, prodRepo)
 	srv.Start()
 }

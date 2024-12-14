@@ -53,7 +53,25 @@ func InitDB(dataSourceName string) (*sql.DB, error) {
 		return nil, err
 	}
 
-	log.Println("Database initialized successfully")
+	// Create products table if it doesn't exist
+	createProductTableSQL := `
+	CREATE TABLE IF NOT EXISTS products (
+		id TEXT PRIMARY KEY,
+		user_id TEXT NOT NULL,
+		title TEXT NOT NULL,
+		image TEXT,
+		price INTEGER NOT NULL,
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		stock INTEGER NOT NULL,
+		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+	);`
+
+	if _, err := db.Exec(createProductTableSQL); err != nil {
+		log.Printf("Failed to create products table: %v", err)
+		return nil, err
+	}
+
 	return db, nil
 }
 
