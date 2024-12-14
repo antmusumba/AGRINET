@@ -1,5 +1,4 @@
 import {Component, inject} from '@angular/core';
-import {NavComponent} from './nav/nav.component';
 import {Router, RouterLink} from '@angular/router';
 import {CartService} from '../../services/cart.service';
 import {PrimaryButtonComponent} from '../primary-button/primary-button.component';
@@ -37,8 +36,5 @@ export class HeaderComponent {
     console.log('Signing out...');
     // Add your sign-out logic (e.g., clear tokens, redirect)
     this.router.navigate(['/auth']);
-  }
-  showBtnClicked() {
-    console.log('showBtnClicked');
   }
 }
