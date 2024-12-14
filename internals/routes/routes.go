@@ -34,9 +34,10 @@ func (r *Router) SetupRoutes() http.Handler {
 	r.muxRouter.HandleFunc("/api/auth/login", r.handler.Login).Methods("POST")
 
 	r.muxRouter.HandleFunc("/api/products", r.handler.CreateProduct).Methods("POST")
+	r.muxRouter.HandleFunc("/api/products", r.handler.ListProducts).Methods("GET")
 
 	// TODO: Add product routes
-	// r.muxRouter.HandleFunc("/api/products/{id}", r.handler.GetProduct).Methods("GET")
+	//
 	// r.muxRouter.HandleFunc("/api/products", r.handler.GetProducts).Methods("GET")
 	// r.muxRouter.HandleFunc("/api/products/{id}", r.handler.UpdateProduct).Methods("PUT")
 	// r.muxRouter.HandleFunc("/api/products/{id}", r.handler.DeleteProduct).Methods("DELETE")
