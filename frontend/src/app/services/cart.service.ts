@@ -2,13 +2,13 @@ import { Injectable, signal } from '@angular/core';
 import { Product } from '../models/products.models';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environment/environment.dev';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private readonly PAYMENT_API_URL =
-    'https://payment-gateway.example.com/api/pay';
+  private readonly PAYMENT_API_URL = `${environment.apiUrl}/api/paymentgateway`;
 
   cart = signal<Product[]>([]);
 

@@ -30,7 +30,7 @@ func NewRouter(userRepo repositories.UserRepo, productRepo repositories.ProductR
 // SetupRoutes configures all the routes for the application
 func (r *Router) SetupRoutes() http.Handler {
 	r.muxRouter.HandleFunc("/api/health", r.handler.HealthHandler).Methods("GET")
-	r.muxRouter.HandleFunc("/api/paymentgateway", r.handler.PaymentHandler).Methods("GET")
+	r.muxRouter.HandleFunc("/api/paymentgateway", r.handler.PaymentHandler).Methods("POST")
 	r.muxRouter.HandleFunc("/api/auth/register", r.handler.Register).Methods("POST")
 	r.muxRouter.HandleFunc("/api/auth/login", r.handler.Login).Methods("POST")
 

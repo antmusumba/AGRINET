@@ -21,16 +21,16 @@ func ProcessStkPush(phoneNumber string, amount int) (string, error) {
 	payload := strings.NewReader(fmt.Sprintf(`{
     "BusinessShortCode": %d,
     "Password": %s,
-    "Timestamp": "20241214182944",
+    "Timestamp": "20160216165627",
     "TransactionType": "CustomerPayBillOnline",
-    "Amount": 1,
+    "Amount": %d,
     "PartyA": 254708374149,
     "PartyB": 174379,
-    "PhoneNumber": 254720804060,
+    "PhoneNumber": %s,
     "CallBackURL": "https://mydomain.com/path",
     "AccountReference": "CompanyXLTD",
     "TransactionDesc": "Payment of X"
-  }`, ShortCode, password))
+  }`, ShortCode, password, amount, phoneNumber))
 
 	client := &http.Client{}
 	req, err := http.NewRequest(method, url, payload)
