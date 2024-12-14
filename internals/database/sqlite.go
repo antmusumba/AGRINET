@@ -24,7 +24,8 @@ func InitDB(dataSourceName string) (*sql.DB, error) {
 	}
 
 	// Enable foreign keys
-	if _, err := db.Exec("PRAGMA foreign_keys = ON"); err != nil {
+	_, err = db.Exec("PRAGMA foreign_keys = ON")
+	if err != nil {
 		log.Printf("Failed to enable foreign keys: %v", err)
 		return nil, err
 	}
@@ -60,10 +61,11 @@ func InitDB(dataSourceName string) (*sql.DB, error) {
 		user_id TEXT NOT NULL,
 		title TEXT NOT NULL,
 		image TEXT,
+		description TEXT,
 		price INTEGER NOT NULL,
+		stock INTEGER NOT NULL,
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-		stock INTEGER NOT NULL,
 		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 	);`
 
