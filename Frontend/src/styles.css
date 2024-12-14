@@ -4,4 +4,14 @@
 @tailwind utilities;
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-image: url("assets/landingimage.jpg");
+  background-size: cover;       /* Ensures the image covers the entire viewport */
+  background-position: center;  /* Centers the image */
+  background-attachment: fixed; /* Keeps the background fixed on scroll */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  height: 100vh;                /* Ensures full viewport height */
+  overflow: hidden;
+}
