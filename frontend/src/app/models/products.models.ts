@@ -30,3 +30,9 @@ export interface RegisterRequest {
   phone: string;
   password: string;
 }
+
+export interface ProductResponse {
+  status: string;
+  message: string;
+  data: Product[];
+}

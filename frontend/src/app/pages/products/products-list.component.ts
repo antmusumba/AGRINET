@@ -13,19 +13,31 @@ import { ProductsService } from '../../services/products.service';
   templateUrl: './products-list.component.html',
 })
 export class ProductsListComponent implements OnInit {
-  products = signal<Product[]>([]);
+  // Declare the signal for search query and products
   searchQuery = signal<string>('');
+  products = signal<Product[]>([]);
+  filteredProducts = signal<Product[]>([]);
 
   constructor(private productsService: ProductsService) {}
 
   ngOnInit() {
     this.productsService.getAllProducts().subscribe({
-      next: (products) => this.products.set(products),
+      next: (products) => {
+        console.log('Fetched products:', products);
+        this.products.set(products);
+        this.filteredProducts.set(products); // Initially display all products
+      },
       error: (err) => console.error('Error fetching products:', err),
     });
   }
 
   onSearch(query: string) {
+    // Update the search query signal and trigger filtering
     this.searchQuery.set(query);
+    this.filteredProducts.set(
+      this.products().filter((product) =>
+        product.title.toLowerCase().includes(query.toLowerCase())
+      )
+    );
   }
 }

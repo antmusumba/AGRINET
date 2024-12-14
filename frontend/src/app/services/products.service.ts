@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+import { map, Observable } from 'rxjs';
 import { environment } from '../environment/environment.dev';
+import { AuthService } from './auth.service';
 import { Product } from '../models/products.models';
+
+interface ProductResponse {
+  status: string;
+  message: string;
+  data: Product[];
+}
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +28,9 @@ export class ProductsService {
 
   // Read all products
   getAllProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.API_URL}`);
+    return this.http.get<ProductResponse>(`${this.API_URL}`).pipe(
+      map((response) => response.data) // Extract the 'data' array
+    );
   }
 
   // Read a specific product

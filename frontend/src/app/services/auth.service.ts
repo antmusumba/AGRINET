@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -21,7 +20,7 @@ export class AuthService {
     this.getStoredToken()
   );
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http
@@ -57,24 +56,32 @@ export class AuthService {
   }
 
   private storeAuthData(token: string, user: User): void {
-    this.cookieService.set('authToken', token);
-    this.cookieService.set('currentUser', JSON.stringify(user));
+    // Store auth data in localStorage
+    localStorage.setItem('authToken', token);
+    localStorage.setItem('currentUser', JSON.stringify(user));
     this.tokenSubject.next(token);
     this.currentUserSubject.next(user);
   }
 
   private getStoredToken(): string | null {
-    return this.cookieService.get('authToken');
+    // Retrieve authToken from localStorage
+    return localStorage.getItem('authToken');
   }
 
   private getStoredUser(): User | null {
-    const user = this.cookieService.get('currentUser');
-    return user ? JSON.parse(user) : null;
+    try {
+      const user = localStorage.getItem('currentUser');
+      return user ? JSON.parse(user) : null;
+    } catch (e: any) {
+      console.error('Error reading from localStorage', e);
+      return null;
+    }
   }
 
   private clearAuthData(): void {
-    this.cookieService.delete('authToken');
-    this.cookieService.delete('currentUser');
+    // Clear localStorage data
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
     this.tokenSubject.next(null);
     this.currentUserSubject.next(null);
   }
