@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CommonModule} from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sign-in',
@@ -18,7 +23,6 @@ import {CommonModule} from '@angular/common';
     MatCardModule,
   ],
   templateUrl: './sign-in.component.html',
-  styles: ``
 })
 export class SignInComponent {
   signInForm: FormGroup;
@@ -38,5 +42,4 @@ export class SignInComponent {
       console.error('Form is invalid');
     }
   }
-
 }
