@@ -110,3 +110,49 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## TECH
+# Database Package
+
+The `database` package provides an abstraction layer for initializing and managing an SQLite database connection in a Go application. It includes functionality for creating necessary tables and handling database interactions.
+
+## Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Database Schema](#database-schema)
+- [Error Handling](#error-handling)
+- [License](#license)
+
+## Installation
+
+To use the `database` package, ensure you have Go installed on your system. You can import the package into your project using Go modules.
+
+```bash
+go get github.com/mattn/go-sqlite3
+```
+# Handlers Package
+
+The `handlers` package provides HTTP handler functions for user authentication and product management in a Go web application. It leverages the internal services for authentication and product management while managing HTTP requests, responses, and error handling.
+
+## Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Endpoints](#endpoints)
+  - [Health Check](#health-check)
+  - [User Registration](#user-registration)
+  - [User Login](#user-login)
+  - [Create Product](#create-product)
+  - [List Products](#list-products)
+- [Error Handling](#error-handling)
+- [License](#license)
+
+## Installation
+
+Ensure that you have Go installed on your system and that the package dependencies are available in your project.
+
+To install this package, you can use:
+
+```bash
+go get path/to/your/repo/handlers
