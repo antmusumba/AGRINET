@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-primary-button',
@@ -7,7 +7,10 @@ import { Component, input, output } from '@angular/core';
   templateUrl: './primary-button.component.html',
 })
 export class PrimaryButtonComponent {
-  label = input('');
+  @Input() label: string = '';
+  @Output() btnClicked = new EventEmitter<void>();
 
-  btnClicked = output();
+  onButtonClick() {
+    this.btnClicked.emit();
+  }
 }

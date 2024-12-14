@@ -3,8 +3,17 @@
   <div class="flex flex-col gap-4">
     <div class="flex gap-4 mt-2">
       <span class="text-lg">Total</span>
-      <span class="text-lg font-bold">{{ 'Ksh ' + total() }}</span>
+      <span class="text-lg font-bold">{{ "Ksh " + total() }}</span>
     </div>
-    <app-primary-button label="Proceed to checkout" />
+    <div *ngIf="isLoading">Processing payment...</div>
+    <div *ngIf="errorMessage" class="text-red-500">{{ errorMessage }}</div>
+
+    <p>Total: {{ total() | currency }}</p>
+
+    <app-primary-button
+      [label]="'Proceed to Checkout'"
+      (btnClicked)="handleCheckout()"
+    >
+    </app-primary-button>
   </div>
 </div>
