@@ -31,6 +31,9 @@ func (s *ProductService) CreateProduct(product *models.Product) error {
 	if product.Description == "" {
 		return errors.New("product description cannot be empty")
 	}
+	if product.UserID == "" {
+		return errors.New("hey, user ID cannot be empty  😏")
+	}
 
 	return s.repo.CreateProd(product)
 }

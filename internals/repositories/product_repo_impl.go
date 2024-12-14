@@ -43,7 +43,7 @@ func (r *productRepo) CreateProd(product *models.Product) error {
 		product.Description, product.Price, product.Stock, product.CreatedAt, product.UpdatedAt)
 
 	if err != nil {
-		return err
+		return errors.New("oops something went wrong")
 	}
 
 	return nil
