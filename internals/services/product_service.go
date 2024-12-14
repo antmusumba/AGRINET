@@ -28,6 +28,10 @@ func (s *ProductService) CreateProduct(product *models.Product) error {
 	if product.Stock < 0 {
 		return errors.New("product stock cannot be negative")
 	}
+	if product.Description == "" {
+		return errors.New("product description cannot be empty")
+	}
+
 	return s.repo.CreateProd(product)
 }
 

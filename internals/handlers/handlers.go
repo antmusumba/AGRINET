@@ -123,3 +123,35 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	h.Success = &response
 	h.WriteJSON(w, http.StatusOK)
 }
+
+// CreateProduct handles product creation
+func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
+	var product models.Product
+	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
+		errorRes := ErrorRes{
+			Status:  "error",
+			Message: "Invalid input",
+		}
+		h.Error = &errorRes
+		h.WriteError(w, http.StatusBadRequest)
+		return
+	}
+
+	err := h.productService.CreateProduct(&product)
+	if err != nil {
+		errorRes := ErrorRes{
+			Status:  "error",
+			Message: err.Error(),
+		}
+		h.Error = &errorRes
+		h.WriteError(w, http.StatusInternalServerError)
+		return
+	}
+
+	response := SuccessRes{
+		Status:  "success",
+		Message: "Product created successfully",
+	}
+	h.Success = &response
+	h.WriteJSON(w, http.StatusCreated)
+}

@@ -35,12 +35,12 @@ func (r *productRepo) CreateProd(product *models.Product) error {
 
 	query := `
 		INSERT INTO products (
-			id, user_id, title, image, price, stock, created_at, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+			id, user_id, title, image, description, price, stock, created_at, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 	_, err := r.db.Exec(query,
 		product.ID, product.UserID, product.Title, product.Image,
-		product.Price, product.Stock, product.CreatedAt, product.UpdatedAt)
+		product.Description, product.Price, product.Stock, product.CreatedAt, product.UpdatedAt)
 
 	if err != nil {
 		return err
@@ -53,12 +53,12 @@ func (r *productRepo) CreateProd(product *models.Product) error {
 func (r *productRepo) GetPrdByEmail(userID string) (*models.Product, error) {
 	product := &models.Product{}
 	query := `
-		SELECT id, user_id, title, image, price, stock, created_at, updated_at
+		SELECT id, user_id, title, image, description, price, stock, created_at, updated_at
 		FROM products WHERE user_id = ?`
 
 	err := r.db.QueryRow(query, userID).Scan(
 		&product.ID, &product.UserID, &product.Title, &product.Image,
-		&product.Price, &product.Stock, &product.CreatedAt, &product.UpdatedAt)
+		&product.Description, &product.Price, &product.Stock, &product.CreatedAt, &product.UpdatedAt)
 
 	if err == sql.ErrNoRows {
 		return nil, errors.New("product not found")
@@ -74,12 +74,12 @@ func (r *productRepo) GetPrdByEmail(userID string) (*models.Product, error) {
 func (r *productRepo) GetProdByID(id string) (*models.Product, error) {
 	product := &models.Product{}
 	query := `
-		SELECT id, user_id, title, image, price, stock, created_at, updated_at
+		SELECT id, user_id, title, image, description, price, stock, created_at, updated_at
 		FROM products WHERE id = ?`
 
 	err := r.db.QueryRow(query, id).Scan(
 		&product.ID, &product.UserID, &product.Title, &product.Image,
-		&product.Price, &product.Stock, &product.CreatedAt, &product.UpdatedAt)
+		&product.Description, &product.Price, &product.Stock, &product.CreatedAt, &product.UpdatedAt)
 
 	if err == sql.ErrNoRows {
 		return nil, errors.New("product not found")
@@ -96,11 +96,11 @@ func (r *productRepo) UpdateProd(product *models.Product) error {
 	product.UpdatedAt = time.Now()
 	query := `
 		UPDATE products 
-		SET user_id = ?, title = ?, image = ?, price = ?, stock = ?, updated_at = ?
+		SET user_id = ?, title = ?, image = ?, description = ?, price = ?, stock = ?, updated_at = ?
 		WHERE id = ?`
 
 	result, err := r.db.Exec(query,
-		product.UserID, product.Title, product.Image, product.Price,
+		product.UserID, product.Title, product.Image, product.Description, product.Price,
 		product.Stock, product.UpdatedAt, product.ID)
 
 	if err != nil {
@@ -141,7 +141,7 @@ func (r *productRepo) DeleteProd(id string) error {
 // ListProducts lists all products
 func (r *productRepo) ListProducts() ([]*models.Product, error) {
 	query := `
-		SELECT id, user_id, title, image, price, stock, created_at, updated_at
+		SELECT id, user_id, title, image, description, price, stock, created_at, updated_at
 		FROM products`
 	rows, err := r.db.Query(query)
 	if err != nil {
@@ -153,7 +153,7 @@ func (r *productRepo) ListProducts() ([]*models.Product, error) {
 	for rows.Next() {
 		product := &models.Product{}
 		err = rows.Scan(
-			&product.ID, &product.UserID, &product.Title, &product.Image,
+			&product.ID, &product.UserID, &product.Title, &product.Image, &product.Description,
 			&product.Price, &product.Stock, &product.CreatedAt, &product.UpdatedAt)
 		if err != nil {
 			return nil, err
