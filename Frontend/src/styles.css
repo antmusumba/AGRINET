@@ -13,5 +13,4 @@ body {
   background-attachment: fixed; /* Keeps the background fixed on scroll */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   height: 100vh;                /* Ensures full viewport height */
-  overflow: hidden;
 }
