@@ -41,9 +41,9 @@ export class AuthComponent {
     this.authForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      username: [''],
       firstName: [''],
       lastName: [''],
+      phone: ['', [Validators.required]],
     });
   }
 
@@ -52,7 +52,6 @@ export class AuthComponent {
 
     if (!this.isSignUp) {
       this.authForm.patchValue({
-        username: '',
         firstName: '',
         lastName: '',
       });
@@ -61,39 +60,44 @@ export class AuthComponent {
 
   onSubmit() {
     if (this.authForm.valid) {
-      this.login(this.authForm.value);
+      const formData = this.authForm.value;
+      this.isLoading = true;
+      this.errorMessage = null;
+
+      if (this.isSignUp) {
+        this.register(formData);
+      } else {
+        this.login(formData);
+      }
     } else {
       console.log('Form is invalid!');
     }
   }
 
-  login(formData: any) {
+  private login(formData: any) {
     this.authService.login(formData.email, formData.password).subscribe(
       (response) => {
         this.isLoading = false;
         console.log('Login Success:', response);
-
-        localStorage.setItem('auth_token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-
         this.router.navigate(['/product']);
       },
       (error) => {
         this.isLoading = false;
-        this.errorMessage = 'Login failed. Please check your credentials.';
+        this.errorMessage = error.message || 'Login failed. Please try again.';
         console.error('Login Error:', error);
       }
     );
   }
 
-  register(formData: any) {
+  private register(formData: any) {
     const registerData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
-      phone: formData.phone,
       password: formData.password,
+      phone: formData.phone,
     };
+
     this.authService.register(registerData).subscribe(
       () => {
         this.isLoading = false;
@@ -102,7 +106,8 @@ export class AuthComponent {
       },
       (error) => {
         this.isLoading = false;
-        this.errorMessage = 'Registration failed. Please try again.';
+        this.errorMessage =
+          error.message || 'Registration failed. Please try again.';
         console.error('Registration Error:', error);
       }
     );

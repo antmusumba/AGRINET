@@ -30,21 +30,27 @@ export interface RegisterRequest {
 })
 export class AuthService {
   private readonly API_URL = `${environment.apiUrl}/api/auth`;
-  private readonly TOKEN_KEY = 'auth_token';
-  private readonly USER_KEY = 'user';
 
-  private currentUserSubject = new BehaviorSubject<User | null>(
-    this.getStoredUser()
-  );
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
+
+  private tokenSubject = new BehaviorSubject<string | null>(null);
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/login`, {
-      email,
-      password,
-    });
+    return this.http
+      .post<AuthResponse>(`${this.API_URL}/login`, {
+        email,
+        password,
+      })
+      .pipe(
+        map((response: AuthResponse) => {
+          this.tokenSubject.next(response.token);
+          this.currentUserSubject.next(response.user);
+          return response;
+        })
+      );
   }
 
   register(userData: RegisterRequest): Observable<void> {
@@ -54,21 +60,15 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
+    this.tokenSubject.next(null);
     this.currentUserSubject.next(null);
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return !!this.tokenSubject.value;
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
-  }
-
-  private getStoredUser(): User | null {
-    const user = localStorage.getItem(this.USER_KEY);
-    return user ? JSON.parse(user) : null;
+    return this.tokenSubject.value;
   }
 }
