@@ -1,46 +1,65 @@
-<div class="flex row">
-  <mat-card>
-    <h2>{{ isSignUp ? 'Sign Up' : 'Sign In' }}</h2>
+<div class="auth-container">
+  <div class="auth-card">
+    <h1>
+      {{ isSignUp ? 'CREATE' : 'WELCOME BACK' }}
+      <span class="highlight">{{ isSignUp ? 'ACCOUNT' : 'TO AGRINET' }}</span>
+    </h1>
+    <p>
+      {{ isSignUp ? 'Already have an account?' : 'Don\'t have an account?' }}
+      <a class="link" (click)="toggleMode()">
+        {{ isSignUp ? 'Sign In' : 'Sign Up' }}
+      </a>
+    </p>
     <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
-      <!-- Email -->
-      <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" required />
-        <mat-error *ngIf="authForm.get('email')?.invalid">
-          Please enter a valid email
-        </mat-error>
-      </mat-form-field>
-
-      <!-- Password -->
-      <mat-form-field appearance="fill">
-        <mat-label>Password</mat-label>
-        <input matInput formControlName="password" type="password" required />
-        <mat-error *ngIf="authForm.get('password')?.invalid">
-          Password is required
-        </mat-error>
-      </mat-form-field>
-
-      <!-- Confirm Password (only for Sign Up) -->
-      <mat-form-field *ngIf="isSignUp" appearance="fill">
-        <mat-label>Confirm Password</mat-label>
+      <!-- Common Fields -->
+      <div class="form-group">
+        <label for="email">Email</label>
         <input
-          matInput
-          formControlName="confirmPassword"
-          type="password"
-          required
+          id="email"
+          type="email"
+          formControlName="email"
+          [class.invalid]="authForm.get('email')?.invalid && authForm.get('email')?.touched"
         />
-        <mat-error *ngIf="authForm.get('confirmPassword')?.invalid">
-          Passwords must match
-        </mat-error>
-      </mat-form-field>
+        <small *ngIf="authForm.get('email')?.invalid && authForm.get('email')?.touched">
+          Please enter a valid email.
+        </small>
+      </div>
 
-      <button mat-raised-button color="primary" type="submit">
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          [class.invalid]="authForm.get('password')?.invalid && authForm.get('password')?.touched"
+        />
+        <small *ngIf="authForm.get('password')?.invalid && authForm.get('password')?.touched">
+          Password must be at least 6 characters long.
+        </small>
+      </div>
+
+      <!-- Additional Fields for Sign Up -->
+      <div *ngIf="isSignUp">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" formControlName="username" />
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input id="firstName" type="text" formControlName="firstName" />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input id="lastName" type="text" formControlName="lastName" />
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">
         {{ isSignUp ? 'Sign Up' : 'Sign In' }}
       </button>
     </form>
-
-    <button mat-button (click)="toggleMode()">
-      Switch to {{ isSignUp ? 'Sign In' : 'Sign Up' }}
-    </button>
-  </mat-card>
+  </div>
 </div>
