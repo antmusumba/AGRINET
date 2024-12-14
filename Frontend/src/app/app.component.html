@@ -1,7 +1,2 @@
 <app-header></app-header>
-@if (!showAuthComponent) {
-  <app-home (click) = "onGetStarted()" ></app-home>
-} @else if (showAuthComponent) {
-  <app-auth></app-auth>
-}
 <router-outlet></router-outlet>

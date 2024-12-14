@@ -1,12 +1,14 @@
 import {Component, output} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 import {PrimaryButtonComponent} from '../primary-button/primary-button.component';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './home.component.html',
   styles: ``
 })
