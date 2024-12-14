@@ -71,4 +71,8 @@ export class AuthService {
   getToken(): string | null {
     return this.tokenSubject.value;
   }
+
+  getUserId(): string | null {
+    return this.currentUserSubject.value?.id || null;
+  }
 }
