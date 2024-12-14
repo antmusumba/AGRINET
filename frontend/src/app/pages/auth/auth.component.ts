@@ -60,18 +60,14 @@ export class AuthComponent {
   }
 
   onSubmit() {
-    if (this.authForm.valid) {
-      const formData = this.authForm.value;
-      this.isLoading = true;
-      this.errorMessage = null;
+    const formData = this.authForm.value;
+    this.isLoading = true;
+    this.errorMessage = null;
 
-      if (this.isSignUp) {
-        this.register(formData);
-      } else {
-        this.login(formData);
-      }
+    if (this.isSignUp) {
+      this.register(formData);
     } else {
-      console.log('Form is invalid!');
+      this.login(formData);
     }
   }
 
