@@ -1,0 +1,69 @@
+<div
+  class="w-1/2 mx-auto mt-5 backdrop-blur-md bg-white/30 p-6 rounded-lg shadow-lg"
+>
+  <div class="text-green-700 bg-white/40 p-6 rounded-lg shadow-lg">
+    <h2 class="text-2xl m-3 text-center text-green-700">Add Product</h2>
+    <form
+      class="flex flex-col justify-center gap-3"
+      [formGroup]="addProductForm"
+      (ngSubmit)="onAddProduct()"
+    >
+      <!-- Product Title -->
+      <mat-form-field appearance="fill">
+        <mat-label>Product Title</mat-label>
+        <input matInput type="text" formControlName="title" required />
+        <mat-error *ngIf="addProductForm.get('title')?.invalid">
+          Please enter a product title.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Description -->
+      <mat-form-field appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          rows="3"
+          required
+        ></textarea>
+        <mat-error *ngIf="addProductForm.get('description')?.invalid">
+          Please enter a product description.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Price -->
+      <mat-form-field appearance="fill">
+        <mat-label>Price</mat-label>
+        <input matInput type="number" formControlName="price" required />
+        <mat-error *ngIf="addProductForm.get('price')?.invalid">
+          Please enter a valid price.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Stock -->
+      <mat-form-field appearance="fill">
+        <mat-label>Stock</mat-label>
+        <input matInput type="number" formControlName="stock" required />
+        <mat-error *ngIf="addProductForm.get('stock')?.invalid">
+          Please enter a valid stock quantity.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Image URL -->
+      <mat-form-field appearance="fill">
+        <mat-label>Image URL</mat-label>
+        <input matInput type="text" formControlName="image" />
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="addProductForm.invalid"
+        class="mt-4 py-2 px-4 rounded-md bg-gradient-to-r from-green-400 to-green-600 text-white shadow-lg hover:from-green-600 hover:to-green-400 transition-colors"
+      >
+        Add Product
+      </button>
+    </form>
+  </div>
+</div>
