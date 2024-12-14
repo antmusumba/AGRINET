@@ -44,6 +44,7 @@ export class AuthComponent {
       firstName: [''],
       lastName: [''],
       phone: ['', [Validators.required]],
+      userName: [''],
     });
   }
 
