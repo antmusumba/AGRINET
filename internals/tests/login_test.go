@@ -6,13 +6,14 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"project/handlers"
+	"project/pkg"
 	"testing"
+
+	"project/mocks" // Mocked dependencies
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
-	"project/handlers"
-	"project/mocks" // Mocked dependencies
-	"project/pkg"
 )
 
 func TestLoginHandler(t *testing.T) {

@@ -178,3 +178,5 @@ func (h *Handler) ListProducts(w http.ResponseWriter, r *http.Request) {
 	h.Success = &response
 	h.WriteJSON(w, http.StatusOK)
 }
+
+
