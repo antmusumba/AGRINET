@@ -22,8 +22,8 @@ type Server struct {
 }
 
 // NewServer creates a new server instance
-func NewServer(addr string, userRepo repositories.UserRepo) *Server {
-	router := routes.NewRouter(userRepo).SetupRoutes()
+func NewServer(addr string, userRepo repositories.UserRepo, productRepo repositories.ProductRepo) *Server {
+	router := routes.NewRouter(userRepo, productRepo).SetupRoutes()
 
 	srv := &http.Server{
 		Addr:         addr,

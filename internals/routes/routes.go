@@ -17,11 +17,13 @@ type Router struct {
 }
 
 // NewRouter initializes a new router with dependencies
-func NewRouter(userRepo repositories.UserRepo) *Router {
+func NewRouter(userRepo repositories.UserRepo, productRepo repositories.ProductRepo) *Router {
 	authService := services.NewAuthService(userRepo)
+	productService := services.NewProductService(productRepo)
+
 	return &Router{
 		muxRouter: mux.NewRouter(),
-		handler:   handlers.NewHandler(authService),
+		handler:   handlers.NewHandler(authService, productService),
 	}
 }
 

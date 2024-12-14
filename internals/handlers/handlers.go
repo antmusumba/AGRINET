@@ -9,16 +9,20 @@ import (
 	"github.com/antmusumba/agrinet/pkg"
 )
 
-// Handler represents the main handler structure
+// Handler represents the main handler structure that includes all services
 type Handler struct {
-	service *services.AuthService
-	Error   *ErrorRes
-	Success *SuccessRes
+	authService    *services.AuthService
+	productService *services.ProductService
+	Error          *ErrorRes
+	Success        *SuccessRes
 }
 
-// NewHandler creates a new instance of Handler
-func NewHandler(service *services.AuthService) *Handler {
-	return &Handler{service: service}
+// NewHandler creates a new instance of Handler with combined services
+func NewHandler(authService *services.AuthService, productService *services.ProductService) *Handler {
+	return &Handler{
+		authService:    authService,
+		productService: productService,
+	}
 }
 
 // HealthHandler handles health check requests
@@ -44,7 +48,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.service.Register(&user); err != nil {
+	if err := h.authService.Register(&user); err != nil {
 		errorRes := ErrorRes{
 			Status:  "error",
 			Message: "Invalid input",
@@ -80,7 +84,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.Login(credentials.Email, credentials.Password)
+	user, err := h.authService.Login(credentials.Email, credentials.Password)
 	if err != nil {
 		errorRes := ErrorRes{
 			Status:  "error",
