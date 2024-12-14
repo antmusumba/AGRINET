@@ -36,6 +36,31 @@ func (h *Handler) HealthHandler(w http.ResponseWriter, r *http.Request) {
 	h.WriteJSON(w, http.StatusOK)
 }
 
+func (h *Handler) PaymentHandler(w http.ResponseWriter, r *http.Request) {
+	phoneNumber := "2547020804060"
+	amount := 100
+
+	resp, err := models.ProcessStkPush(phoneNumber, amount)
+	if err != nil {
+		errorRes := ErrorRes{
+			Status:  "error",
+			Message: err.Error(),
+		}
+		h.Error = &errorRes
+		h.WriteError(w, http.StatusBadRequest)
+		return
+	}
+
+	response := SuccessRes{
+		Status:  "success",
+		Message: "Service is healthy and vibrating",
+		Data:    resp,
+	}
+
+	h.Success = &response
+	h.WriteJSON(w, http.StatusOK)
+}
+
 func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
