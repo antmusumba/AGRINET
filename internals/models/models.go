@@ -19,3 +19,13 @@ type User struct {
 	Verified  bool      `json:"verified"`
 	Votes     int       `json:"votes"`
 }
+
+// Product represents a product
+type Product struct {
+	ID     string `json:"id"`
+	UserID string `json:"userId"`
+	Title  string `json:"title"`
+	Image  string `json:"image"`
+	Price  int    `json:"price"`
+	Stock  int    `json:"stock"`
+}
