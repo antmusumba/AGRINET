@@ -37,10 +37,10 @@ func (h *Handler) HealthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) PaymentHandler(w http.ResponseWriter, r *http.Request) {
-	phoneNumber := "2547020804060"
+	phoneNumber := "254720804060"
 	amount := 100
 
-	resp, err := models.ProcessStkPush(phoneNumber, amount)
+	resp, err := services.ProcessStkPush(phoneNumber, amount)
 	if err != nil {
 		errorRes := ErrorRes{
 			Status:  "error",
