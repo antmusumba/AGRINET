@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import nlp from 'compromise';
 
 @Component({
   selector: 'app-search-bar',
@@ -13,7 +14,18 @@ export class SearchBarComponent {
 
   @Output() search = new EventEmitter<string>();
 
+  // Process query using NLP before emitting
   onSearch() {
-    this.search.emit(this.searchQuery); // Emit the search query to parent
+    const processedQuery = this.processQueryWithNLP(this.searchQuery);
+    this.search.emit(processedQuery);
+  }
+
+  // Example NLP processing
+  processQueryWithNLP(query: string): string {
+    const doc = nlp(query);
+
+    const nouns = doc.nouns().out('array');
+
+    return nouns.join(' ') || query;
   }
 }
