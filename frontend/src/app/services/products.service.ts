@@ -21,7 +21,7 @@ export class ProductsService {
 
   // Create a new product
   createProduct(product: Partial<Product>): Observable<Product> {
-    const userId = this.authService.getUserId();
+    const userId = '5c9aba89-c5b5-4469-a14e-3c0cb6ba1bde'; // TODO: Replace with actual user ID
     const productWithUser = { ...product, userId };
     return this.http.post<Product>(`${this.API_URL}`, productWithUser);
   }
