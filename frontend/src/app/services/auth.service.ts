@@ -11,14 +11,10 @@ import { AuthResponse, RegisterRequest, User } from '../models/products.models';
 export class AuthService {
   private readonly API_URL = `${environment.apiUrl}/api/auth`;
 
-  private currentUserSubject = new BehaviorSubject<User | null>(
-    this.getStoredUser()
-  );
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  private tokenSubject = new BehaviorSubject<string | null>(
-    this.getStoredToken()
-  );
+  private tokenSubject = new BehaviorSubject<string | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -56,32 +52,11 @@ export class AuthService {
   }
 
   private storeAuthData(token: string, user: User): void {
-    // Store auth data in localStorage
-    localStorage.setItem('authToken', token);
-    localStorage.setItem('currentUser', JSON.stringify(user));
     this.tokenSubject.next(token);
     this.currentUserSubject.next(user);
   }
 
-  private getStoredToken(): string | null {
-    // Retrieve authToken from localStorage
-    return localStorage.getItem('authToken');
-  }
-
-  private getStoredUser(): User | null {
-    try {
-      const user = localStorage.getItem('currentUser');
-      return user ? JSON.parse(user) : null;
-    } catch (e: any) {
-      console.error('Error reading from localStorage', e);
-      return null;
-    }
-  }
-
   private clearAuthData(): void {
-    // Clear localStorage data
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('currentUser');
     this.tokenSubject.next(null);
     this.currentUserSubject.next(null);
   }
