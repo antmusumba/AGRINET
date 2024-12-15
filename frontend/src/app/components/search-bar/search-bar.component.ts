@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import nlp from 'compromise';
 
+declare var webkitSpeechRecognition: any;
+
 @Component({
   selector: 'app-search-bar',
   standalone: true,
@@ -11,8 +13,19 @@ import nlp from 'compromise';
 })
 export class SearchBarComponent {
   searchQuery: string = '';
-
   @Output() search = new EventEmitter<string>();
+
+  recognition: any = null;
+
+  constructor() {
+    if ('webkitSpeechRecognition' in window) {
+      this.recognition = new webkitSpeechRecognition();
+      this.recognition.continuous = false;
+      this.recognition.lang = 'en-US';
+      this.recognition.interimResults = false;
+      this.recognition.maxAlternatives = 1;
+    }
+  }
 
   // Process query using NLP before emitting
   onSearch() {
