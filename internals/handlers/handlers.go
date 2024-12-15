@@ -11,8 +11,8 @@ import (
 
 // Handler represents the main handler structure that includes all services
 type Handler struct {
-	authService    *services.AuthService
-	productService *services.ProductService
+	AuthService    *services.AuthService
+	ProductService *services.ProductService
 	Error          *ErrorRes
 	Success        *SuccessRes
 }
@@ -20,8 +20,8 @@ type Handler struct {
 // NewHandler creates a new instance of Handler with combined services
 func NewHandler(authService *services.AuthService, productService *services.ProductService) *Handler {
 	return &Handler{
-		authService:    authService,
-		productService: productService,
+		AuthService:    authService,
+		ProductService: productService,
 	}
 }
 
@@ -48,7 +48,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.authService.Register(&user); err != nil {
+	if err := h.AuthService.Register(&user); err != nil {
 		errorRes := ErrorRes{
 			Status:  "error",
 			Message: "Invalid input",
@@ -84,7 +84,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.authService.Login(credentials.Email, credentials.Password)
+	user, err := h.AuthService.Login(credentials.Email, credentials.Password)
 	if err != nil {
 		errorRes := ErrorRes{
 			Status:  "error",
@@ -137,7 +137,7 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.productService.CreateProduct(&product)
+	err := h.ProductService.CreateProduct(&product)
 	if err != nil {
 		errorRes := ErrorRes{
 			Status:  "error",
@@ -158,7 +158,7 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 
 // ListProducts handles listing all products
 func (h *Handler) ListProducts(w http.ResponseWriter, r *http.Request) {
-	products, err := h.productService.ListProducts()
+	products, err := h.ProductService.ListProducts()
 	if err != nil {
 		errorRes := ErrorRes{
 			Status:  "error",
