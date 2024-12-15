@@ -1,57 +1,44 @@
 package services
 
 import (
-	"bytes"
-	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
-// Fake credentials
-// TODO: replace with real credentials and store in environment variables
-const (
-	password  = "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjQxMjE1MDMxMDA4"
-	ShortCode = 174379
-)
-
-// ProcessStkPush processes a STK push payment
+// ProcessStkPush processes a STK push payment using hardcoded values
 func ProcessStkPush(phoneNumber string, amount int) (string, error) {
 
-	// API endpoint and method
+	// Define the STK Push request URL
 	url := "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
 	method := "POST"
 
-	// Dynamic payload structure
-	payload := map[string]interface{}{
-		"BusinessShortCode": ShortCode,
-		"Password":          password,
-		"Timestamp":         "20241215031008",
-		"TransactionType":   "CustomerPayBillOnline",
-		"Amount":            amount,
-		"PartyA":            phoneNumber,
-		"PartyB":            ShortCode,
-		"PhoneNumber":       phoneNumber,
-		"CallBackURL":       "https://mydomain.com/path",
-		"AccountReference":  "CompanyXLTD",
-		"TransactionDesc":   "Payment of X",
-	}
-
-	// Convert payload to JSON
-	payloadBytes, err := json.Marshal(payload)
-	if err != nil {
-		return "", err
-	}
+	// Create the request payload with hardcoded values
+	payload := strings.NewReader(fmt.Sprintf(`{
+    "BusinessShortCode": 174379,
+    "Password": "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjQxMjE1MDYxODQ5",
+    "Timestamp": "20241215061849",
+    "TransactionType": "CustomerPayBillOnline",
+    "Amount": %d,
+    "PartyA": "%s",
+    "PartyB": 174379,
+    "PhoneNumber": "%s",
+    "CallBackURL": "https://mydomain.com/path",
+    "AccountReference": "AgriNet",
+    "TransactionDesc": "Payment of Seedlings"
+  }`, amount, phoneNumber, phoneNumber))
 
 	// Create an HTTP client and request
 	client := &http.Client{}
-	req, err := http.NewRequest(method, url, bytes.NewBuffer(payloadBytes))
+	req, err := http.NewRequest(method, url, payload)
 	if err != nil {
 		return "", err
 	}
 
-	// Add headers
+	// Add headers to the request
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer srADXA5t9cwR4MeWkVSrn4qree4T")
+	req.Header.Add("Authorization", "Bearer MxIhRFOXIWnZ3DfJAceBDKzWdXnb")
 
 	// Send the request
 	res, err := client.Do(req)
@@ -60,11 +47,12 @@ func ProcessStkPush(phoneNumber string, amount int) (string, error) {
 	}
 	defer res.Body.Close()
 
-	// Read and print the response
+	// Read the response body
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return "", err
 	}
 
+	// Return the response as a string
 	return string(body), nil
 }
