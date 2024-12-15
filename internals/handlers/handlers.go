@@ -37,27 +37,31 @@ func (h *Handler) HealthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) PaymentHandler(w http.ResponseWriter, r *http.Request) {
-	phoneNumber := "254720804060"
-	amount := 100
+	var paymentDetails struct {
+		Amount      int    `json:"amount"`
+		PhoneNumber string `json:"phone"`
+	}
 
-	resp, err := services.ProcessStkPush(phoneNumber, amount)
-	if err != nil {
-		errorRes := ErrorRes{
-			Status:  "error",
-			Message: err.Error(),
-		}
-		h.Error = &errorRes
+	// Decode incoming JSON request body
+	if err := json.NewDecoder(r.Body).Decode(&paymentDetails); err != nil {
 		h.WriteError(w, http.StatusBadRequest)
 		return
 	}
 
-	response := SuccessRes{
+	// Call the STK Push service to process the payment
+	resp, err := services.ProcessStkPush(paymentDetails.PhoneNumber, paymentDetails.Amount)
+	if err != nil {
+		h.WriteError(w, http.StatusBadRequest)
+		return
+	}
+
+	// Send the success response
+	h.Success = &SuccessRes{
 		Status:  "success",
-		Message: "Service is healthy and vibrating",
+		Message: "Payment processed successfully",
 		Data:    resp,
 	}
 
-	h.Success = &response
 	h.WriteJSON(w, http.StatusOK)
 }
 
